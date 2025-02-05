@@ -35,7 +35,7 @@ func (e *Expense) Add(amount string, desc string) string {
 	splited := strings.Split(string(file), "\n")
 	e.ID = len(splited)
 
-	formatted = fmt.Sprintf("%v ID: %v, Description: %v, Date: %v, Amount: %v$\n", string(file), e.ID, e.Description, e.Date, e.Amount)
+	formatted = fmt.Sprintf("%vID: %v, Description: %v, Date: %v, Amount: %v$\n", string(file), e.ID, e.Description, e.Date, e.Amount)
 	os.WriteFile("./store.txt", []byte(formatted), 0644)
 
 	return "# Expense added successfully (ID:" + strconv.Itoa(e.ID) + ")"
