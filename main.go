@@ -7,7 +7,7 @@ import (
 
 func getSwitches() []string {
 	arguments := os.Args
-	return arguments[1:]
+	return arguments
 }
 
 func getDescription(entry []string) string {
@@ -36,8 +36,43 @@ func getAmount(entry []string) string {
 	return entry[amountKey]
 }
 
+func getCommand(entry []string) (string, error) {
+	for _, value := range entry {
+
+		switch value {
+		case "add":
+			return value, nil
+		case "list":
+			return value, nil
+		case "delete":
+			return value, nil
+		case "summery":
+			return value, nil
+		}
+	}
+
+	return "", fmt.Errorf("invalid command") 
+}
+
 func main() {
 
-	fmt.Println(getDescription(getSwitches()), getAmount(getSwitches()))
+	ex := Expense{}
+
+	switches := getSwitches()
+	command, err := getCommand(switches)
+
+	if err != nil {
+		fmt.Println("please enter the valid command")
+		return
+	}
+
+	switch command {
+	case "add":
+		test := ex.Add(getAmount(switches), getDescription(switches))
+		fmt.Println(test)
+	case "list":
+	case "summery":
+	case "delete":
+	}
 
 }
