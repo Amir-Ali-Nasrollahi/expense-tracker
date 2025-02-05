@@ -66,8 +66,13 @@ func (e *Expense) Delete(id string) string {
 	return "item deleted successfuly"
 }
 
-func (e Expense) Show() {
+func (e Expense) Show() string {
 
+	file , err := os.ReadFile("./store.txt")
+	if err != nil {
+		return "First, you need to add expenses"
+	}
+	return string(file)
 }
 
 func (e Expense) Summary(SpecificMonth int) {
