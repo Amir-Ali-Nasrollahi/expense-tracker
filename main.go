@@ -36,6 +36,19 @@ func getAmount(entry []string) string {
 	return entry[amountKey]
 }
 
+func getId(entry []string) string {
+	var Id int
+	for key, value := range entry {
+		if value == "--id" {
+			Id = key + 1
+		}
+	}
+	if Id == 0 {
+		return "-"
+	}
+	return entry[Id]
+}
+
 func getCommand(entry []string) (string, error) {
 	for _, value := range entry {
 
@@ -68,11 +81,13 @@ func main() {
 
 	switch command {
 	case "add":
-		test := ex.Add(getAmount(switches), getDescription(switches))
-		fmt.Println(test)
+		addValue := ex.Add(getAmount(switches), getDescription(switches))
+		fmt.Println(addValue)
 	case "list":
 	case "summery":
 	case "delete":
+		deleteValue := ex.Delete(getId(switches))	
+		fmt.Println(deleteValue)
 	}
 
 }
