@@ -87,6 +87,8 @@ func main() {
 		listValue := ex.Show()
 		fmt.Println(listValue)
 	case "summery":
+		summeryValue := ex.Summary(0)
+		fmt.Println(summeryValue)
 	case "delete":
 		deleteValue := ex.Delete(getId(switches))	
 		fmt.Println(deleteValue)
