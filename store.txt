@@ -1,0 +1,4 @@
+ID: 1, Description: lunch, Date: 2025-2-5, Amount: 21$
+ID: 2, Description: breakfest, Date: 2025-2-5, Amount: 3$
+ID: 4, Description: breakfest, Date: 2025-2-5, Amount: 5$
+ID: 4, Description: dinner, Date: 2025-2-5, Amount: 13$
