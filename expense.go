@@ -24,16 +24,23 @@ func (e *Expense) Add(amount string, desc string) string {
 	e.Date = fmt.Sprintf("%v-%v-%v", time.Now().Year(), int(time.Now().Month()), time.Now().Day())
 
 	file, err := os.ReadFile("./store.txt")
-	if err != nil {
+	if err != nil || len(file) == 0 {
 		e.ID = 1
 		formatted = fmt.Sprintf("ID: %v, Description: %v, Date: %v, Amount: %v$\n", e.ID, e.Description, e.Date, e.Amount)
 		os.WriteFile("./store.txt", []byte(formatted), 0644)
 
 		return "# Expense added successfully (ID:" + strconv.Itoa(e.ID) + ")"
 	}
-
+	
 	splited := strings.Split(string(file), "\n")
-	e.ID = len(splited)
+ 
+	NewSplitedByVirgol := strings.Split(splited[len(splited)-2], ",")
+	reg, _ := regexp.Compile(`[0-9]+`)
+	
+	// find a string in first Item of that ( ID item )
+	lastId := reg.FindString(NewSplitedByVirgol[0])
+	e.ID, _ = strconv.Atoi(lastId)
+	e.ID++
 
 	formatted = fmt.Sprintf("%vID: %v, Description: %v, Date: %v, Amount: %v$\n", string(file), e.ID, e.Description, e.Date, e.Amount)
 	os.WriteFile("./store.txt", []byte(formatted), 0644)
@@ -53,12 +60,11 @@ func (e *Expense) Delete(id string) string {
 
 	WriteFile, _ := os.OpenFile("./store.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 
-	for key, value := range storeExpense[:len(storeExpense)-1] {
-		storeId := strings.Split(value, ",")
+	for _, value := range storeExpense[:len(storeExpense)-1] {
+		NewSplitedByVirgol := strings.Split(value, ",")
 		reg, _ := regexp.Compile(id)
 
-		fmt.Println(reg.MatchString(storeId[0]), key)
-		if !reg.MatchString(storeId[0]) {
+		if !reg.MatchString(NewSplitedByVirgol[0]) {
 			WriteFile.WriteString(value + "\n")
 		}
 	}
@@ -68,16 +74,29 @@ func (e *Expense) Delete(id string) string {
 
 func (e Expense) Show() string {
 
-	file , err := os.ReadFile("./store.txt")
+	file, err := os.ReadFile("./store.txt")
 	if err != nil {
 		return "First, you need to add expenses"
 	}
 	return string(file)
 }
 
-func (e Expense) Summary(SpecificMonth int) {
-	// nothing again
-	// mairali naoidsfjlj 
-	// nothing just testing git
-	// change something
+func (e Expense) Summary(SpecificMonth int) string {
+
+	var sum int
+	file, _ := os.ReadFile("./store.txt")
+	splited := strings.Split(string(file), "\n")
+	if SpecificMonth == 0 {
+		for _, value := range splited[:len(splited)-1] {
+
+			NewSplitedByVirgol := strings.Split(value, ",")
+			reg, _ := regexp.Compile(`[0-9]+`)
+
+			price := reg.FindString(NewSplitedByVirgol[len(NewSplitedByVirgol)-1])
+			summery, _ := strconv.Atoi(price)
+			sum += summery
+		}
+	}
+
+	return "# Total expenses: " + strconv.Itoa(sum) + "$"
 }
