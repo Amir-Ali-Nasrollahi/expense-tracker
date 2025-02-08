@@ -5,7 +5,7 @@
 - with simple command and fast to use
 
 ## the commands
-```
+```bash
 $ expense add --description "the description of expense" --amount 12
 # Expense added successfully (ID: 1)
 
