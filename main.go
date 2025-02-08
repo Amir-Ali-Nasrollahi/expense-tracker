@@ -3,11 +3,27 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func getSwitches() []string {
 	arguments := os.Args
 	return arguments
+}
+
+func getMonth(entry []string) int {
+	var descriptionKey int
+	for key, value := range entry {
+		if value == "--month" {
+			descriptionKey = key + 1
+		}
+	}
+	if descriptionKey == 0 {
+		return 0
+	}
+
+	val, _ := strconv.Atoi(entry[descriptionKey])
+	return val
 }
 
 func getDescription(entry []string) string {
@@ -64,7 +80,7 @@ func getCommand(entry []string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("invalid command") 
+	return "", fmt.Errorf("invalid command")
 }
 
 func main() {
@@ -87,10 +103,11 @@ func main() {
 		listValue := ex.Show()
 		fmt.Println(listValue)
 	case "summery":
-		summeryValue := ex.Summary(0)
+		month := getMonth(switches)
+		summeryValue := ex.Summary(month)
 		fmt.Println(summeryValue)
 	case "delete":
-		deleteValue := ex.Delete(getId(switches))	
+		deleteValue := ex.Delete(getId(switches))
 		fmt.Println(deleteValue)
 	}
 

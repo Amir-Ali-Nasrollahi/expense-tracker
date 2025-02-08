@@ -31,12 +31,12 @@ func (e *Expense) Add(amount string, desc string) string {
 
 		return "# Expense added successfully (ID:" + strconv.Itoa(e.ID) + ")"
 	}
-	
+
 	splited := strings.Split(string(file), "\n")
- 
+
 	NewSplitedByVirgol := strings.Split(splited[len(splited)-2], ",")
 	reg, _ := regexp.Compile(`[0-9]+`)
-	
+
 	// find a string in first Item of that ( ID item )
 	lastId := reg.FindString(NewSplitedByVirgol[0])
 	e.ID, _ = strconv.Atoi(lastId)
@@ -96,7 +96,31 @@ func (e Expense) Summary(SpecificMonth int) string {
 			summery, _ := strconv.Atoi(price)
 			sum += summery
 		}
+		return "# Total expenses : " + strconv.Itoa(sum) + "$"
 	}
 
-	return "# Total expenses: " + strconv.Itoa(sum) + "$"
+	var flag bool = true
+	for _, value := range splited[:len(splited)-1] {
+
+		NewSplitedByVirgol := strings.Split(value, ",")
+		reg, _ := regexp.Compile(`[0-9]+`)
+
+		Date := reg.FindAllString(NewSplitedByVirgol[len(NewSplitedByVirgol)-2], -1)
+		month, _ := strconv.Atoi(Date[1])
+
+		if month == SpecificMonth {
+			flag = false
+			price := reg.FindString(NewSplitedByVirgol[len(NewSplitedByVirgol)-1])
+			summery, _ := strconv.Atoi(price)
+			sum += summery
+		}
+	}
+
+	monthName := time.Month(SpecificMonth).String()
+
+	if flag == true {
+		return "# We dont have any expense in " + monthName 
+	}
+	return "# Total expenses in " + monthName + " : " + strconv.Itoa(sum) + "$"
+
 }
